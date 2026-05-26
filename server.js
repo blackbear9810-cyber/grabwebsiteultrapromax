@@ -46,8 +46,8 @@ const app = express();
 // ================================
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://socialmallexpress.com",
-  "https://www.socialmallexpress.com",
+  "https://adsvendorasia.com",
+  "https://www.adsvendorasia.com",
 ];
 
 // Preflight handling (VERY IMPORTANT for POST login)
