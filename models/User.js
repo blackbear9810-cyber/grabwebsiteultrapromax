@@ -47,8 +47,23 @@ const UserSchema = new mongoose.Schema(
 
     /* ================= USER WALLET ================= */
     wallet: {
-      platform: { type: String, default: "" },
-      address: { type: String, default: "" }
+      bep20: {
+        walletName:String,
+        holderName:String,
+        address:String
+      },
+    
+      trc20: {
+        walletName:String,
+        holderName:String,
+        address:String
+      },
+    
+      bank: {
+        walletName:String,
+        holderName:String,
+        accountNumber:String
+      }
     },
 
     /* ================= ADMIN FLAGS ================= */
@@ -64,14 +79,15 @@ const UserSchema = new mongoose.Schema(
     },
 
     /* ================= DEPOSIT WALLET (ADMIN CONTROL) ================= */
-    depositWallet: {
-      address: {
-        type: String,
-        default: ""
+    depositWallets: {
+      bep20: {
+        address: { type: String, default: "" }
       },
-      network: {
-        type: String,
-        default: "TRC20"
+      trc20: {
+        address: { type: String, default: "" }
+      },
+      bank: {
+        accountNumber: { type: String, default: "" }
       }
     }
   },

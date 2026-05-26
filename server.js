@@ -33,6 +33,8 @@ const transactionRoutes = require("./routes/transactionRoutes");
 const adminRoutes = require("./routes/admin");
 const orderRoutes = require("./routes/orderRoutes");
 const notificationRoutes = require("./routes/notificationRoutes");
+const contractRoutes = require("./routes/contractRoutes");
+const supportRoutes = require("./routes/supportRoutes");
 
 // ================================
 //        INITIALIZE APP
@@ -126,6 +128,8 @@ app.use("/api/services", serviceRoutes);
 app.use("/api/transactions", transactionRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/notifications", notificationRoutes);
+app.use("/api/contracts", contractRoutes);
+app.use("/api/support", supportRoutes);
 
 // ================================
 //        HEALTH CHECK
