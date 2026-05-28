@@ -28,6 +28,11 @@ const supportMessageSchema = new mongoose.Schema(
       enum: ["sent", "delivered", "read"],
       default: "sent",
     },
+    expiresAt: {
+      type: Date,
+      default: () => new Date(Date.now() + 60 * 60 * 1000),
+      index: { expires: 0 }
+    },
   },
   {
     timestamps: true,

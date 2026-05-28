@@ -10,6 +10,7 @@ exports.sendMessage = async (req, res) => {
       username,
       inviteCode,
       message,
+      sessionId,
     } = req.body;
 
     const newMessage = new SupportMessage({
@@ -18,6 +19,7 @@ exports.sendMessage = async (req, res) => {
       message,
       sender: "user",
       status: "sent",
+      sessionId,
     });
 
     await newMessage.save();
@@ -99,49 +101,60 @@ exports.getAllMessages = async (req, res) => {
 // ADMIN REPLY
 exports.replyMessage = async (req, res) => {
 
-    try {
-  
-      const {
-        username,
-        invitationCode,
-        message,
-        messageId,
-      } = req.body;
-  
-      // Save admin reply
-      const reply = new SupportMessage({
-        username,
-        invitationCode,
-        message,
-        sender: "admin",
-        status: "delivered",
-      });
-  
-      await reply.save();
-  
-      // Update old user message status
-      await SupportMessage.findByIdAndUpdate(
-        messageId,
-        {
-          status: "replied",
-        }
-      );
-  
-      res.json({
-        success: true,
-        message: "Reply sent successfully",
-        data: reply,
-      });
-  
-    } catch (error) {
-  
-      console.log(error);
-  
-      res.status(500).json({
+  try {
+
+    const {
+      username,
+      invitationCode,
+      message,
+      messageId,
+    } = req.body;
+
+    // Find original user message
+    const originalMessage = await SupportMessage.findById(messageId);
+
+    if (!originalMessage) {
+      return res.status(404).json({
         success: false,
-        message: "Failed to send reply",
+        message: "Original message not found",
       });
-  
     }
-  
-  };
+
+    // Save admin reply
+    const reply = new SupportMessage({
+      username,
+      invitationCode,
+      message,
+      sender: "admin",
+      status: "delivered",
+      sessionId: originalMessage.sessionId,
+    });
+
+    await reply.save();
+
+    // Update old user message status
+    await SupportMessage.findByIdAndUpdate(
+      messageId,
+      {
+        status: "replied",
+      }
+    );
+
+    res.json({
+      success: true,
+      message: "Reply sent successfully",
+      data: reply,
+    });
+
+  } catch (error) {
+
+    console.log(error);
+
+    res.status(500).json({
+      success: false,
+      message: "Failed to send reply",
+    });
+
+  }
+
+};
